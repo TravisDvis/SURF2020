@@ -1,0 +1,12 @@
+
+def myRK4(x0,dt,nSteps):
+    
+    x = np.zeros((len(x0),nSteps))
+    x[:][0] = x0[:]
+    for kk in 1:nSteps
+        k1 = f([:][kk-1])
+        k2 = f(x[:][kk-1] + 0.5*dt*k1)
+        k3 = f(x[:][kk-1] + 0.5*dt*k2)
+        k4 = f(x[:][kk-1] + dt*k3)
+        x[:][kk] = x[:][kk-1] + (dt/6)*(k1 + k2 + k3 + k4)
+    
