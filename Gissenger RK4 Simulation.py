@@ -1,12 +1,11 @@
 import numpy as np
-from scipy.integrate import odeint
 import matplotlib.pyplot as plt
-from mpl_toolkits import mplot3d
 
-from myRK4 import myRK4
 from function import *
-from GetRK4ReversalTime import getReversalTimes
-from plotRK4 import plotRK4
+from GetRK4ReversalTime import *
+from plotRK4 import *
+from mpl_toolkits import mplot3d
+from myRK4 import *
 
 #time/time step
 dt = float(input('Enter time step: '))
