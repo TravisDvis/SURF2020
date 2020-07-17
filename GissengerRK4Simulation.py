@@ -1,11 +1,11 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
-from function import *
-from GetRK4ReversalTime import *
-from plotRK4 import *
+from GissengerFunction import *
+from ReversalTimes import *
+from PlotRK4 import *
 from mpl_toolkits import mplot3d
-from myRK4 import *
+from RK4Scheme import *
 
 #time/time step
 dt = float(input('Enter time step: '))
@@ -23,3 +23,4 @@ x = myRK4(x0,dt,nSteps)
 reversal_times = getReversalTimes(x, dt)
 #plots RK4
 plotRK4(x,reversal_times)
+plotRK4Dipole(x,dt,reversal_times)

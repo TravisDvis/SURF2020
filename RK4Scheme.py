@@ -1,6 +1,6 @@
 import numpy as np
 
-from function import *
+from GissengerFunction import *
 
 def myRK4(x0,dt,nSteps):
     #Set initial vector
