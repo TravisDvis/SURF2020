@@ -9,11 +9,15 @@ from GetRK4ReversalTime import getReversalTimes
 from plotRK4 import plotRK4
 
 #time/time step
-dt = 0.1
-T = 1000
+dt = float(input('Enter time step: '))
+T = float(input('Enter total time: '))
 nSteps = int(T/dt)
 #initial condition
-x0 = np.array([[1],[2],[3]])
+print("Enter Initial Condition")
+x0_x = float(input('Enter x coordinate: '))
+x0_y = float(input('Enter y coordinate: '))
+x0_z = float(input('Enter z coordinate: '))
+x0 = np.array([[x0_x],[x0_y],[x0_z]])
 #RK4 Matrix
 x = myRK4(x0,dt,nSteps)
 #reversal time vector

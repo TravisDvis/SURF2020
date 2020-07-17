@@ -10,7 +10,6 @@ def getReversalTimes(xMatrix, dt):
     for kk in range(np.size(xMatrix,1)-1):
 
         t = t + dt
-
         time_index = np.array([[t],[kk]])
 
         if xMatrix[1][kk] >= 0:
