@@ -22,5 +22,4 @@ x = myRK4(x0,dt,nSteps)
 #reversal time vector
 reversal_times = getReversalTimes(x, dt)
 #plots RK4
-plotRK4(x,reversal_times)
-plotRK4Dipole(x,dt,reversal_times)
+plotRK4(x,reversal_times,dt) 
