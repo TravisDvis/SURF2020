@@ -2,7 +2,6 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 from mpl_toolkits import mplot3d
-from matplotlib.animation import FuncAnimation
 
 def plotRK4(xMatrix,reversal_times,dt):
     #Initialize 3D plot
@@ -33,11 +32,14 @@ def plotRK4(xMatrix,reversal_times,dt):
     ax1.set(ylabel='Q')
     ax2.set(ylabel='D')
     ax3.set(xlabel='time', ylabel='V')
-    #Plotting the data
+    #Plot Q
     ax1.plot(t,Q_t)
+    #Plot D
     ax2.plot(t,D_t)
+    #Plot vertical lines when reversals occur
     for tt in range(np.size(reversal_times,1)):
         ax2.vlines(reversal_times[0][tt], -2.5, 2.5, colors='r')
+    #Plot V
     ax3.plot(t,V_t)
     #Show plot
     plt.show()
