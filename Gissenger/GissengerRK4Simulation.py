@@ -5,6 +5,7 @@ from FloatExceptionHandle import *
 from GissengerFunction import *
 from ReversalTimes import *
 from PlotRK4 import *
+from PredictReversal import *
 from mpl_toolkits import mplot3d
 from RK4Scheme import *
 
@@ -23,4 +24,5 @@ x = myRK4(x0,dt,nSteps)
 #reversal time vector
 reversal_times = getReversalTimes(x, dt)
 #plots RK4
-plotRK4(x,reversal_times,dt) 
+plotRK4(x,reversal_times,dt)
+predictReversal(x,1,-1)
