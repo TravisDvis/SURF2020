@@ -25,4 +25,4 @@ x = myRK4(x0,dt,nSteps)
 reversal_times = getReversalTimes(x, dt)
 #plots RK4
 plotRK4(x,reversal_times,dt)
-predictReversal(x,1,-1)
+predictReversal(x,0.42)

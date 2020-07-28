@@ -1,36 +1,46 @@
+import math
 import numpy as np
 
-def predictReversal(xMatrix,positive_threshold,negative_threshold):
-    #positive to negative
+from PredictionFunctions import *
+
+def predictReversal(xMatrix,threshold):
+    
+    true_positive = 0
+    true_negative = 0
+    false_positive = 0
+    false_negative = 0
+
     for kk in range(np.size(xMatrix,1)):
         
-        if xMatrix[1][kk] <= positive_threshold and xMatrix[1][kk] >= 0:
-            reversal_prediction = True
-        else:
-            reversal_prediction = False
-            continue
+        if xMatrix[1][kk] >= 0:
+            result = positiveToNegative(kk,xMatrix,threshold)
+        elif xMatrix[1][kk] < 0:
+            result = negativeToPositive(kk,xMatrix,threshold)
         
-        tt = kk
-        for tt in range(np.size(xMatrix,1)):
-            if xMatrix[1][tt-1] > xMatrix[1][tt]:
-                continue
-            else:
-                increase = xMatrix[1][tt]
-                temp_index = tt
-                break
-        
-        if increase >= 0:
-            prediction = False
-        else:
-            prediction = True
-            kk = temp_index
+        if result == 0:
+            true_positive = true_positive + 1
+        elif result == 1:
+            true_negative = true_negative + 1
+        elif result == 2:
+            false_positive = false_positive + 1
+        elif result == 3:
+            false_negative = false_negative + 1
+    
+    acc = (true_positive + true_negative)/(true_positive + true_negative + false_positive + false_negative)
+    
+    f1 = (2*true_positive)/(2*true_positive + false_positive + false_negative)
 
-        if reversal_prediction == True and prediction == True:
-            print("True Positive")
-        elif reversal_prediction == False and prediction == False:
-            print("True Negative")
-        elif reversal_prediction == True and prediction == False:
-            print("False Positive")
-        elif reversal_prediction == False and prediction == True:
-            print("False Negative")
-        
+    csi = (true_positive)/(true_positive + false_positive + false_negative)
+
+    mcc_num = ((true_positive*true_negative)-(false_positive*false_negative))
+    mcc_den = math.sqrt((true_positive + false_positive)*(true_positive + false_negative)*(true_negative + false_positive)*(true_negative + false_negative))
+    mcc = mcc_num/mcc_den
+
+    print("Accuracy: ",acc)
+    print("F1: ",f1)
+    print("Critical Success Index: ",csi)
+    print("Matthew's Correlation Coefficient: ",mcc)
+
+    skill_scores = np.array([[acc],[f1],[csi],[mcc]])
+
+    return skill_scores
