@@ -22,5 +22,5 @@ def getReversalTimes(xMatrix, dt):
             elif sign == 1 and xMatrix[1][kk+1] >= 0:
                 print("A dipole reversal has occurred at time:",t)
                 reversal_times = np.append(reversal_times,time_index,axis=1)
-
+    
     return reversal_times    
