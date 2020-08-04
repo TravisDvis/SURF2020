@@ -82,9 +82,9 @@ def crossAndReversed(xMatrix,threshold,reversal_times):
 
     for i in range(np.size(crossed_threshold)-1):
         for ii in range(np.size(reversal_times,1)):
-                if reversal_times[1][ii] > crossed_threshold[i] and reversal_times[1][ii] < crossed_threshold[i+1]:
-                    crossed_and_reversed = np.append(crossed_and_reversed,crossed_threshold[i])
-                    if i == (np.size(crossed_threshold)-2):
-                        crossed_and_reversed = np.append(crossed_and_reversed,crossed_threshold[i+1])
+            if reversal_times[1][ii] > crossed_threshold[i] and reversal_times[1][ii] < crossed_threshold[i+1]:
+                crossed_and_reversed = np.append(crossed_and_reversed,crossed_threshold[i])
+                if i == (np.size(crossed_threshold)-2):
+                    crossed_and_reversed = np.append(crossed_and_reversed,crossed_threshold[i+1])
     
     return crossed_and_reversed
