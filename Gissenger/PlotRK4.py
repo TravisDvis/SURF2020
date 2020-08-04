@@ -16,9 +16,9 @@ def plotRK4(xMatrix,reversal_times,dt):
     #Time Reversal Detection
     for kk in range(np.size(xMatrix,1)):
         for tt in range(np.size(reversal_times,1)):
-            #Condition for recognizing reversal time
+    #Condition for recognizing reversal time
             if kk == reversal_times[1][tt]: 
-                #Plot vertical line when reversal occurs
+    #Plot vertical line when reversal occurs
                 x_t = np.linspace(xMatrix[0][kk],xMatrix[0][kk],10)
                 y_t = np.linspace(xMatrix[1][kk],xMatrix[1][kk],10)
                 z_t = np.linspace(-5,5,10)

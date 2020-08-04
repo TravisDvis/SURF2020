@@ -1,5 +1,6 @@
 
 def floatExceptionHandle(string_question,mode):
+    #Make sure a proper float value is entered
     while True:
         try:
             x = float(input(string_question))
@@ -9,4 +10,5 @@ def floatExceptionHandle(string_question,mode):
             break
         except ValueError:
             print("You didn't enter a valid value. Try again.")
+    
     return x
