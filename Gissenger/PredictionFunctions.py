@@ -9,7 +9,7 @@ def runPrediction(xMatrix,threshold,reversal_times):
     false_positive = 0
     false_negative = 0
     #initialize curve indicating when reversal is happening
-    reversal_curve = reversalCurve(xMatrix,threshold,reversal_times)
+    reversal_curve = reversalCurve(xMatrix,reversal_times)
     #iterate through Matrix
     for kk in range(np.size(xMatrix,1)):
     #If value is below threshold, reversal prediction is affirmative
@@ -42,7 +42,7 @@ def runPrediction(xMatrix,threshold,reversal_times):
     return skill_scores            
 
 
-def reversalCurve(xMatrix,threshold,reversal_times):
+def reversalCurve(xMatrix,reversal_times):
     
     #Intialize reversal curve
     reversal_curve = np.zeros(np.size(xMatrix,1))
@@ -60,7 +60,9 @@ def reversalCurve(xMatrix,threshold,reversal_times):
                 break         
             
     return reversal_curve
-    
+
+#Work in Progress
+"""    
 def crossThreshold(xMatrix,threshold):
         
     crossed_threshold = np.array([])
@@ -92,3 +94,5 @@ def crossAndReversed(xMatrix,threshold,reversal_times):
                     crossed_and_reversed = np.append(crossed_and_reversed,crossed_threshold[i+1])
     
     return crossed_and_reversed
+
+"""

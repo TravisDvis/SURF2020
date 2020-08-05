@@ -2,7 +2,7 @@ import numpy as np
 
 from GissengerFunction import *
 
-def myRK4(x0,dt,nSteps):
+def RK4Scheme(x0,dt,nSteps):
     #Set initial vector
     x = x0
     xMatrix = x0

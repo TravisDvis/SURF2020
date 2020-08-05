@@ -20,7 +20,7 @@ x0_y = floatExceptionHandle('Enter y coordinate: ',1)
 x0_z = floatExceptionHandle('Enter z coordinate: ',1)
 x0 = np.array([[x0_x],[x0_y],[x0_z]])
 #RK4 Matrix
-x = myRK4(x0,dt,nSteps)
+x = RK4Scheme(x0,dt,nSteps)
 #reversal time vector
 reversal_times = getReversalTimes(x,dt)
 #plots RK4
