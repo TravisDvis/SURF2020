@@ -35,7 +35,10 @@ def runPrediction(xMatrix,threshold,reversal_times):
     #Matthew's Correlation Coefficient
     mcc_num = ((true_positive*true_negative)-(false_positive*false_negative))
     mcc_den = math.sqrt((true_positive + false_positive)*(true_positive + false_negative)*(true_negative + false_positive)*(true_negative + false_negative))
-    mcc = mcc_num/mcc_den
+    try:
+        mcc = mcc_num/mcc_den
+    except ZeroDivisionError:
+        mcc = 0
     #Storing all skill scores into an array
     skill_scores = np.array([[acc],[f1],[csi],[mcc]])
 

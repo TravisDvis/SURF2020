@@ -1,6 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
+from ChooseFile import *
 from FloatExceptionHandle import *
 from GissengerFunction import *
 from ReversalTimes import *
@@ -18,12 +19,13 @@ print("Enter Initial Condition")
 x0_x = floatExceptionHandle('Enter x coordinate: ',1)
 x0_y = floatExceptionHandle('Enter y coordinate: ',1)
 x0_z = floatExceptionHandle('Enter z coordinate: ',1)
-x0 = np.array([[x0_x],[x0_y],[x0_z]])
+x0 = np.array([[x0_x],[x0_y],[x0_z],[0],[0]])
 #RK4 Matrix
+data_matrix = processFile()
 x = RK4Scheme(x0,dt,nSteps)
 #reversal time vector
-reversal_times = getReversalTimes(x,dt)
+reversal_times = getReversalTimes(x)
 #plots RK4
-plotRK4(x,reversal_times,dt)
+plotRK4(x,reversal_times)
 #sweep plotting mcc vs thresholds
 skillSweep(x,reversal_times)

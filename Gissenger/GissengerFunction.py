@@ -14,7 +14,7 @@ def f(x):
     dDdt = -nu*D + V*Q
     dVdt = gamma - V + Q*D
     #Enter values into vector
-    func = np.array([[dQdt],[dDdt],[dVdt]])
+    func = np.array([[dQdt],[dDdt],[dVdt],[0],[0]])
 
     return func
 
