@@ -28,4 +28,4 @@ reversal_times = getReversalTimes(x)
 #plots RK4
 plotRK4(x,reversal_times)
 #sweep plotting mcc vs thresholds
-skillSweep(x,reversal_times)
+skillSweep(x,reversal_times,dt)

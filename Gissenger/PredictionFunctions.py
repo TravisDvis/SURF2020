@@ -1,7 +1,8 @@
 import math
 import numpy as np
 
-def runPrediction(xMatrix,threshold,reversal_times):
+
+def runPrediction(xMatrix,threshold_pos,threshold_neg,reversal_times,dt):
     
     #initialize values
     true_positive = 0
@@ -9,11 +10,11 @@ def runPrediction(xMatrix,threshold,reversal_times):
     false_positive = 0
     false_negative = 0
     #initialize curve indicating when reversal is happening
-    reversal_curve = reversalCurve(xMatrix,reversal_times)
+    reversal_curve = reversalCurve(xMatrix,threshold_pos,threshold_neg,reversal_times,dt)
     #iterate through Matrix
     for kk in range(np.size(xMatrix,1)):
     #If value is below threshold, reversal prediction is affirmative
-        if xMatrix[1][kk] <= threshold and xMatrix[1][kk] >= -1*threshold:
+        if xMatrix[1][kk] <= threshold_pos and xMatrix[1][kk] >= -1*threshold_neg:
             reversal_prediction = True
         else:
             reversal_prediction = False
@@ -26,12 +27,20 @@ def runPrediction(xMatrix,threshold,reversal_times):
             false_positive = false_positive + 1
         elif reversal_prediction == False and reversal_curve[kk] == 1:
             false_negative = false_negative + 1
+        elif reversal_curve[kk] == 2:
+            continue
     #Accuracy
     acc = (true_positive + true_negative)/(true_positive + true_negative + false_positive + false_negative)
     #F1 Score
-    f1 = (2*true_positive)/(2*true_positive + false_positive + false_negative)
+    try:
+        f1 = (2*true_positive)/(2*true_positive + false_positive + false_negative)
+    except ZeroDivisionError:
+        f1 = 0
     #Critical Success Index
-    csi = (true_positive)/(true_positive + false_positive + false_negative)
+    try:
+        csi = (true_positive)/(true_positive + false_positive + false_negative)
+    except ZeroDivisionError:
+        csi = 0
     #Matthew's Correlation Coefficient
     mcc_num = ((true_positive*true_negative)-(false_positive*false_negative))
     mcc_den = math.sqrt((true_positive + false_positive)*(true_positive + false_negative)*(true_negative + false_positive)*(true_negative + false_negative))
@@ -45,57 +54,80 @@ def runPrediction(xMatrix,threshold,reversal_times):
     return skill_scores            
 
 
-def reversalCurve(xMatrix,reversal_times):
+def reversalCurve(xMatrix,threshold_pos,threshold_neg,reversal_times,dt):
     
     #Intialize reversal curve
     reversal_curve = np.zeros(np.size(xMatrix,1))
+    crossed_reversed = crossAndReversed(xMatrix,threshold_pos,threshold_neg,reversal_times)
+
+    width = int(0.5/dt)
+
     #Iterate through matrix/reversal times and indeces
     for i in range(np.size(xMatrix,1)):
-        for ii in range(np.size(reversal_times,1)):
-    #Compare matrix index to reversal index
-            if i == reversal_times[1][ii]:
-    #Indicate when reversal occurs
-                reversal_curve[i-2] = 1
-                reversal_curve[i-1] = 1
-                reversal_curve[i] = 1
-                reversal_curve[i+1] = 1
-                reversal_curve[i+2] = 1
-                break         
-            
+        for ii in range(np.size(crossed_reversed,0)):
+            for iii in range(np.size(crossed_reversed,1)-1):
+                if i == crossed_reversed[ii][iii]:
+                    for iv in range(int(crossed_reversed[ii][iii]),int(crossed_reversed[ii][iii+1])):
+                       for v in range(np.size(reversal_times,1)):
+                            if crossed_reversed[ii][iii] <= reversal_times[1][v] and crossed_reversed[ii][iii+1] >= reversal_times[1][v]:
+                                #Checkpoint
+                                for vi in range(int(reversal_times[1][v])-width,int(reversal_times[1][v])):
+                                    reversal_curve[vi] = 1
+                                for vii in range(int(reversal_times[1][v]),int(crossed_reversed[ii][iii+1])):
+                                    reversal_curve[vii] = 2
+    
     return reversal_curve
 
-#Work in Progress
-"""    
-def crossThreshold(xMatrix,threshold):
+def crossThreshold(xMatrix,threshold_pos,threshold_neg):
         
-    crossed_threshold = np.array([])
-   
+    crossed_threshold = np.empty([0,2])
+    crossed_threshold_1 = np.array([])
+
+    count = 0
+
     for kk in range(np.size(xMatrix,1)-1):
         
-        if xMatrix[1][kk] > threshold or xMatrix[1][kk] < -1*threshold:
-            sign = 0
-        else:
-            sign = 1
-        
-        if sign == 0 and (xMatrix[1][kk+1] <= threshold and xMatrix[1][kk+1] >= -1*threshold):
-            crossed_threshold = np.append(crossed_threshold,kk)
-        elif sign == 1 and (xMatrix[1][kk+1] > threshold or xMatrix[1][kk+1] < -1*threshold):
-            crossed_threshold = np.append(crossed_threshold,kk)
+        if xMatrix[1][kk] > threshold_pos:
+            sign_before = 0
+        elif xMatrix[1][kk] < -1*threshold_neg:
+            sign_before = 1
+        elif xMatrix[1][kk] <= threshold_pos and xMatrix[1][kk] >= -1*threshold_neg:
+            sign_before = 2
+
+        if xMatrix[1][kk+1] > threshold_pos:
+            sign_after = 3
+        elif xMatrix[1][kk+1] < -1*threshold_neg:
+            sign_after = 4
+        elif xMatrix[1][kk+1] <= threshold_pos and xMatrix[1][kk+1] >= -1*threshold_neg:
+            sign_after = 5
+
+        if sign_before == 0 and (sign_after == 4 or sign_after == 5):
+            crossed_threshold_1 = np.append(crossed_threshold_1,kk+1)
+            count = count + 1
+        elif sign_before == 1 and (sign_after == 3 or sign_after == 5):
+            crossed_threshold_1 = np.append(crossed_threshold_1,kk+1)
+            count = count + 1
+        elif sign_before == 2 and (sign_after == 3 or sign_after == 4):
+            crossed_threshold_1 = np.append(crossed_threshold_1,kk+1)
+            count = count + 1
+
+        if count == 2:
+            count = 0
+            crossed_threshold = np.append(crossed_threshold,[crossed_threshold_1],axis=0)
+            crossed_threshold_1 = np.array([])
 
     return crossed_threshold
 
-def crossAndReversed(xMatrix,threshold,reversal_times):
+def crossAndReversed(xMatrix,threshold_pos,threshold_neg,reversal_times):
     
-    crossed_threshold = crossThreshold(xMatrix,threshold)
-    crossed_and_reversed = np.array([])
-
-    for i in range(np.size(crossed_threshold)-1):
-        for ii in range(np.size(reversal_times,1)):
-            if reversal_times[1][ii] > crossed_threshold[i] and reversal_times[1][ii] < crossed_threshold[i+1]:
-                crossed_and_reversed = np.append(crossed_and_reversed,crossed_threshold[i])
-                if i == (np.size(crossed_threshold)-2):
-                    crossed_and_reversed = np.append(crossed_and_reversed,crossed_threshold[i+1])
+    crossed_threshold = crossThreshold(xMatrix,threshold_pos,threshold_neg)
+    crossed_and_reversed = np.empty([0,2])
+   
+    for i in range(np.size(crossed_threshold,0)):
+        for ii in range(np.size(crossed_threshold,1)-1):
+            for iii in range(np.size(reversal_times,1)):
+                if reversal_times[1][iii] >= crossed_threshold[i][ii] and reversal_times[1][iii] <= crossed_threshold[i][ii+1]:
+                    crossed_and_reversed_1 = np.array([crossed_threshold[i][ii],crossed_threshold[i][ii+1]])
+                    crossed_and_reversed = np.append(crossed_and_reversed,[crossed_and_reversed_1],axis=0)
     
     return crossed_and_reversed
-
-"""

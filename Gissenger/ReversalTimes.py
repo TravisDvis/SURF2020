@@ -13,11 +13,11 @@ def getReversalTimes(xMatrix):
     #Condition for recognizing a reversal
         if kk < np.size(xMatrix,1):
             if sign == 0 and xMatrix[1][kk+1] < 0:
-                time_index = np.array([[xMatrix[3][kk]],[xMatrix[4][kk]]])
+                time_index = np.array([[xMatrix[3][kk+1]],[xMatrix[4][kk+1]]])
                 print("A dipole reversal has occurred at time:",xMatrix[3][kk+1])
                 reversal_times = np.append(reversal_times,time_index,axis=1)
             elif sign == 1 and xMatrix[1][kk+1] >= 0:
-                time_index = np.array([[xMatrix[3][kk]],[xMatrix[4][kk]]])
+                time_index = np.array([[xMatrix[3][kk+1]],[xMatrix[4][kk+1]]])
                 print("A dipole reversal has occurred at time:",xMatrix[3][kk+1])
                 reversal_times = np.append(reversal_times,time_index,axis=1)
     
