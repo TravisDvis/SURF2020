@@ -70,7 +70,6 @@ def reversalCurve(xMatrix,threshold_pos,threshold_neg,reversal_times,dt):
                     for iv in range(int(crossed_reversed[ii][iii]),int(crossed_reversed[ii][iii+1])):
                        for v in range(np.size(reversal_times,1)):
                             if crossed_reversed[ii][iii] <= reversal_times[1][v] and crossed_reversed[ii][iii+1] >= reversal_times[1][v]:
-                                #Checkpoint
                                 for vi in range(int(reversal_times[1][v])-width,int(reversal_times[1][v])):
                                     reversal_curve[vi] = 1
                                 for vii in range(int(reversal_times[1][v]),int(crossed_reversed[ii][iii+1])):
